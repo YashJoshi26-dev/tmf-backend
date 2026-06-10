@@ -1,0 +1,40 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Saree Showroom API",
+    "version": "1.0.0",
+    "description": "Modular Express + MongoDB backend. CSV/Google-Sheet driven inventory."
+  },
+  "servers": [
+    { "url": "http://localhost:5000/api/v1", "description": "Local dev" }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+    },
+    "schemas": {
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "message": { "type": "string" },
+          "data": {},
+          "meta": { "type": "object" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/login":  { "post": { "summary": "Email/password login" } },
+    "/auth/otp/send":   { "post": { "summary": "Send OTP to phone" } },
+    "/auth/otp/verify": { "post": { "summary": "Verify OTP and log in" } },
+    "/products":       { "get": { "summary": "List products with filters" } },
+    "/products/{id}":  { "get": { "summary": "Product by id" } },
+    "/inventory/template": { "get": { "summary": "Download CSV template (admin)" } },
+    "/inventory/upload":   { "post": { "summary": "Upload products CSV (admin)" } },
+    "/inventory/sync":     { "post": { "summary": "Trigger Google Sheet sync (admin)" } },
+    "/cart":   { "get": { "summary": "Get cart" }, "post": { "summary": "Save cart (server re-verifies prices)" } },
+    "/orders": { "post": { "summary": "Place order" } },
+    "/payments/razorpay/verify": { "post": { "summary": "Verify Razorpay payment" } }
+  }
+}

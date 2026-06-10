@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: tmf-mongo
+    restart: unless-stopped
+    ports: ["27017:27017"]
+    volumes: [mongo_data:/data/db]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: tmf-api
+    restart: unless-stopped
+    ports: ["5000:5000"]
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGO_URI: mongodb://mongo:27017/saree_showroom
+    env_file: [.env]
+    volumes:
+      - ./logs:/app/logs
+
+volumes:
+  mongo_data:
