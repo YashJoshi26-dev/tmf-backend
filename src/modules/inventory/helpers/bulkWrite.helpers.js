@@ -10,12 +10,20 @@ const chunk = (arr, n = 500) => {
 /**
  * Execute Model.bulkWrite() across chunks; accumulates summary.
  * Returns { matched, modified, inserted, upserted }.
+ * Resilient: if a chunk partially fails (e.g. duplicate slug), it logs and continues
+ * using whatever partial result Mongo returns, instead of crashing the whole import.
  */
 const runBulkChunks = async (Model, ops, n = 500) => {
   const totals = { matched: 0, modified: 0, inserted: 0, upserted: 0 };
   for (const batch of chunk(ops, n)) {
     if (!batch.length) continue;
-    const res = await Model.bulkWrite(batch, { ordered: false });
+    let res;
+    try {
+      res = await Model.bulkWrite(batch, { ordered: false });
+    } catch (err) {
+      res = err.result || err;
+      console.error('bulkWrite chunk had errors (continuing):', err.message);
+    }
     totals.matched   += res.matchedCount   || 0;
     totals.modified  += res.modifiedCount  || 0;
     totals.inserted  += res.insertedCount  || 0;

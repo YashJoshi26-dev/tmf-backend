@@ -58,6 +58,7 @@ const importCsv = async ({ buffer, filename, triggeredBy = null, source = 'csv_u
               $set: {
                 ...built.updateOp.$set,
                 'subProducts.$': built.subProduct,
+              slug: built.slug,
               },
             },
             upsert: false,

@@ -1,8 +1,7 @@
 'use strict';
 
 const env = require('./env');
-
-const allowList = [env.clientUrl].filter(Boolean);
+const allowList = (env.clientUrl || '').split(' ').map(s => s.trim()).filter(Boolean);
 
 module.exports = {
   origin: (origin, cb) => {
