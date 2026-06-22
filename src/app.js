@@ -17,6 +17,7 @@ const healthRoutes  = require('./routes/health.routes');
 const webhookRoutes = require('./routes/webhook.routes');
 const apiRoutes     = require('./routes');
 const swagger       = require('./docs/swagger');
+const sitemapRoutes = require('./routes/sitemap');
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use(compression());
 
 // 6. Health (unauthenticated)
 app.use('/health', healthRoutes);
+app.use('/', sitemapRoutes);
 
 // 7. Swagger
 swagger.mount(app);
