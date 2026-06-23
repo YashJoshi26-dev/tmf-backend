@@ -13,13 +13,14 @@ router.get("/sitemap.xml", async (req, res) => {
     const products = await Product.find({ isActive: true }, "slug updatedAt");
     const categories = await Category.find({}, "slug");
 
-    const staticPages = [
-      { url: "/", priority: "1.0", changefreq: "daily" },
-      { url: "/shop", priority: "0.9", changefreq: "daily" },
-      { url: "/about", priority: "0.5", changefreq: "monthly" },
-      { url: "/contact", priority: "0.5", changefreq: "monthly" },
-    ];
+    const BASE_URL = "https://themaharajafashion.com";
 
+const staticPages = [
+  { url: "/", priority: "1.0", changefreq: "daily" },
+  { url: "/bridal", priority: "0.9", changefreq: "weekly" },
+  { url: "/wholesale", priority: "0.5", changefreq: "monthly" },
+  { url: "/lookbook", priority: "0.5", changefreq: "monthly" },
+];
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
     staticPages.forEach((p) => {
